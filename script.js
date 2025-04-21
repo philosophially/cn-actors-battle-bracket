@@ -143,6 +143,64 @@ class BracketBattle {
     this.battleDiv.appendChild(btn2);
   }
 
+  async createShareImage(winner) {
+    // Create a canvas
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+
+    // Set canvas size (adjust these values as needed)
+    canvas.width = 600;
+    canvas.height = 800;
+
+    // Fill background
+    ctx.fillStyle = "#f9f9f9";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Load and draw the title
+    ctx.fillStyle = "#333";
+    ctx.font = "bold 32px Fredoka";
+    ctx.textAlign = "center";
+    ctx.fillText("🇨🇳 China Actors Bracket Battle ✨", canvas.width / 2, 50);
+
+    // Load the winner image
+    const img = new Image();
+    await new Promise((resolve, reject) => {
+      img.onload = resolve;
+      img.onerror = reject;
+      img.src = winner.image;
+    });
+
+    // Calculate image dimensions (maintaining aspect ratio)
+    const maxWidth = 400;
+    const maxHeight = 500;
+    let width = img.width;
+    let height = img.height;
+
+    if (width > maxWidth) {
+      height = (maxWidth * height) / width;
+      width = maxWidth;
+    }
+    if (height > maxHeight) {
+      width = (maxHeight * width) / height;
+      height = maxHeight;
+    }
+
+    // Draw image centered
+    const x = (canvas.width - width) / 2;
+    const y = 100;
+    ctx.drawImage(img, x, y, width, height);
+
+    // Draw winner text
+    ctx.fillStyle = "#333";
+    ctx.font = "bold 36px Fredoka";
+    ctx.fillText(`Winner: ${winner.name}!`, canvas.width / 2, y + height + 50);
+
+    // Convert canvas to blob
+    return new Promise((resolve) => {
+      canvas.toBlob(resolve, "image/jpeg", 0.8);
+    });
+  }
+
   showWinner(winner) {
     this.battleDiv.innerHTML = "";
 
@@ -178,11 +236,15 @@ class BracketBattle {
 
     shareBtn.onclick = async () => {
       try {
-        // Try to share with the Web Share API first
-        if (navigator.share) {
-          const response = await fetch(winner.image);
-          const blob = await response.blob();
-          const file = new File([blob], "winner.jpg", { type: "image/jpeg" });
+        // Check if the browser supports sharing files (mainly mobile devices)
+        if (
+          navigator.canShare &&
+          navigator.canShare({ files: [new File([], "test.txt")] })
+        ) {
+          const shareBlob = await this.createShareImage(winner);
+          const file = new File([shareBlob], "winner-result.jpg", {
+            type: "image/jpeg",
+          });
 
           await navigator.share({
             title: "China Actors Bracket Battle Winner",
@@ -191,65 +253,105 @@ class BracketBattle {
           });
           shareMsg.textContent = "Shared successfully!";
         } else {
-          // Fallback to clipboard copy
+          // Desktop or browsers that don't support file sharing: text-only sharing
           await navigator.clipboard.writeText(
             `I played the China Actors Bracket Battle and my winner was: ${winner.name}! What would yours be?`
           );
-          shareMsg.textContent = "Result copied! Share it with your friends!";
+          shareMsg.textContent =
+            "Result copied to clipboard! Share it with your friends!";
         }
       } catch (err) {
         console.error("Error sharing:", err);
-        shareMsg.textContent =
-          "Couldn't share result. Try copying the text instead.";
+        // Try clipboard as fallback if sharing fails
+        try {
+          await navigator.clipboard.writeText(
+            `I played the China Actors Bracket Battle and my winner was: ${winner.name}! What would yours be?`
+          );
+          shareMsg.textContent =
+            "Result copied to clipboard! Share it with your friends!";
+        } catch (clipboardErr) {
+          shareMsg.textContent = "Couldn't share result. Please try again.";
+        }
       }
       shareMsg.setAttribute("role", "status");
     };
   }
 
   celebrateWinner() {
-    // Create a colorful confetti burst
-    const duration = 3000;
+    // Initial burst from multiple angles
+    const colors = ["#ff0000", "#ffb145", "#ffd700"];
+
+    // Center burst
+    confetti({
+      particleCount: 100,
+      spread: 100,
+      origin: { y: 0.6 },
+      colors: colors,
+      startVelocity: 45,
+    });
+
+    // Side bursts
+    confetti({
+      particleCount: 50,
+      angle: 60,
+      spread: 80,
+      origin: { x: 0, y: 0.65 },
+      colors: colors,
+    });
+
+    confetti({
+      particleCount: 50,
+      angle: 120,
+      spread: 80,
+      origin: { x: 1, y: 0.65 },
+      colors: colors,
+    });
+
+    // Set up continuous confetti
+    const duration = 2000;
     const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+    const start = Date.now();
 
     function randomInRange(min, max) {
       return Math.random() * (max - min) + min;
     }
 
     const interval = setInterval(function () {
-      const timeLeft = duration - Date.now();
+      const timeLeft = duration - (Date.now() - start);
 
       if (timeLeft <= 0) {
         return clearInterval(interval);
       }
 
-      const particleCount = 50;
+      const particleCount = 30;
 
       // Launch confetti from the sides
       confetti(
         Object.assign({}, defaults, {
           particleCount,
           origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
-          colors: ["#ff0000", "#ffb145", "#ffd700"],
+          colors: colors,
         })
       );
       confetti(
         Object.assign({}, defaults, {
           particleCount,
           origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
-          colors: ["#ff0000", "#ffb145", "#ffd700"],
+          colors: colors,
         })
       );
     }, 150);
 
-    // Add one final burst in the middle
+    // Final celebratory burst
     setTimeout(() => {
       confetti({
-        particleCount: 100,
-        spread: 70,
+        particleCount: 150,
+        spread: 100,
         origin: { y: 0.6 },
-        colors: ["#ff0000", "#ffb145", "#ffd700"],
+        colors: colors,
+        startVelocity: 45,
       });
-    }, duration - 1000);
+    }, duration - 500);
   }
 
   resetGame() {
