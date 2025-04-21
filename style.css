@@ -18,8 +18,10 @@ body {
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
-  background-color: var(--secondary-color);
+
   color: var(--primary-color);
+  background: #020024;
+  background: linear-gradient(90deg, #e3ffe7 0%, #d9e7ff 100%);
 }
 
 h1 {
