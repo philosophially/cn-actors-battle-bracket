@@ -1,0 +1,28 @@
+{
+  "actors": [
+    { "name": "Dylan Wang (王鹤棣)", "image": "images/WHD.jpg" },
+    { "name": "Xiao Zhan (肖战)", "image": "images/XZ.jpg" },
+    { "name": "Wang Yibo (王一博)", "image": "images/WYB.jpg" },
+    { "name": "Leo Wu (吴磊)", "image": "images/WL.jpg" },
+    { "name": "Zhang Wanyi (张晚意)", "image": "images/ZWY.jpg" },
+    { "name": "Bai Jingting (白敬亭)", "image": "images/BJT.jpg" },
+    { "name": "Zhu Yilong (朱一龙)", "image": "images/ZYL.jpg" },
+    { "name": "Song Weilong (宋威龙)", "image": "images/SWL.jpg" },
+    { "name": "Zhang Linghe (张凌赫)", "image": "images/ZLH.jpg" },
+    { "name": "Tan Jianci (檀健次)", "image": "images/TJC.jpg" },
+    { "name": "Fan Chengcheng (范丞丞)", "image": "images/FCC.jpg" },
+    { "name": "Liu Yuning (刘宇宁)", "image": "images/LYN.jpg" },
+    { "name": "Tian Jiarui (田嘉瑞)", "image": "images/TJR.jpg" },
+    { "name": "Cheng Lei (丞磊)", "image": "images/CL.jpg" },
+    { "name": "Luo Yunxi (罗云熙)", "image": "images/LYX.jpg" },
+    { "name": "Ryan Ding (丁禹兮)", "image": "images/DYX.jpg" },
+    { "name": "Hou Minghao (侯明昊)", "image": "images/HMH.jpg" },
+    { "name": "Zhang Kangle (张康乐)", "image": "images/ZKL.jpg" },
+    { "name": "Cheng Yi (成毅)", "image": "images/CY.jpg" },
+    { "name": "Li Yunrui (李昀锐)", "image": "images/LYR.jpg" },
+    { "name": "Ao Ruipeng (敖瑞鹏)", "image": "images/ARP.jpg" },
+    { "name": "Deng Wei (邓为)", "image": "images/DW.jpg" },
+    { "name": "Huang Junjie (黄俊捷)", "image": "images/HJJ.jpg" },
+    { "name": "Chen Zheyuan (陈哲远)", "image": "images/CZY.jpg" }
+  ]
+}
